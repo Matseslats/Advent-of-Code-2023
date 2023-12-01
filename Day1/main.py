@@ -19,10 +19,14 @@ substitutions = {
     9: 9
 }
 
-def get_indexes(line: str, subs: dict):
+def get_indexes(line: str, subs: dict, reverse=False):
     indexes = []
     for key in subs:
-        index_found_at = line.find(str(key))
+        index_found_at = -1
+        if not reverse:
+            index_found_at = line.find(str(key))
+        else:
+            index_found_at = line.rfind(str(key))
         if index_found_at != -1:
             indexes.append((key, index_found_at))
 
@@ -33,9 +37,10 @@ def get_indexes(line: str, subs: dict):
 def get_calibration_value(line: str) -> int:
     indexes = get_indexes(line, substitutions)
     first_int = int(substitutions[indexes[0][0]])
+    indexes = get_indexes(line, substitutions, True)
     last_int = int(substitutions[indexes[-1][0]])
 
-    print(10*first_int + last_int)
+    # print(10*first_int + last_int)
     return 10*first_int + last_int
 
 
