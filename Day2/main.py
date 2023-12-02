@@ -1,16 +1,21 @@
-MAX = {
-    "red": 12,
-    "blue": 14,
-    "green": 13
-}
+def get_power(dict):
+    product = 1
+    for color in dict:
+        product *= dict[color]
+    
+    return product
 
 def is_solvable(line):
+    MAX = {
+        "red": 0,
+        "blue": 0,
+        "green": 0
+    }
     parts = line.split(": ")
     game_no = parts[0].split(" ")[1]
     print("Game: ", game_no)
 
     draw_piles = parts[1].split("; ")
-    possible = True
     for draw_pile in draw_piles: # Set of draws
         current = {
             "red": 0,
@@ -27,13 +32,9 @@ def is_solvable(line):
         
         # print(current)
         for color in current:
-            if current[color] > MAX[color]:
-                possible = False
+            MAX[color] = max(MAX[color], current[color])
         
-    if possible:
-        print(line)
-        return int(game_no)
-    return 0
+    return get_power(MAX)
 
 if __name__ == "__main__":
     lines = []
