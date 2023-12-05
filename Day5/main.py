@@ -1,6 +1,5 @@
 from typing import List
 import time
-start_time = time.time()
 
 def empty_map() -> dict:
     map = {
@@ -69,6 +68,7 @@ def get_reverse_index_from_map(this_map, index):
     return index
 
 if __name__ == "__main__":
+    start_time = time.time()
     lines = []
     with open("input.txt") as file:
         lines = file.readlines()
@@ -110,5 +110,6 @@ if __name__ == "__main__":
 
     output = location
 
+    end_time = time.time()
     print(f"Output: {output}")
-    print(f"Took {time.time()-start_time}s")
+    print(f"Took {((end_time-start_time)*1000):.4}ms")
