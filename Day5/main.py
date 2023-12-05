@@ -18,7 +18,6 @@ def get_maps(lines: List[str]) -> dict:
     is_start_num = True
     for index, num in enumerate(nums):
         if is_start_num:
-            print(num)
             maps["to_convert"].append((num, num+nums[index+1]))
             is_start_num = False
         else:
