@@ -76,7 +76,7 @@ if __name__ == "__main__":
     
     maps = get_maps(lines)
 
-    location = 17630000
+    location = 0
     found = False
     humidity = temperature = light = water = fertilizer = soil = seed = 0
     while not found:
