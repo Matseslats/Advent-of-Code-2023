@@ -1,4 +1,6 @@
 from typing import List
+import time
+start_time = time.time()
 
 def empty_map() -> dict:
     map = {
@@ -23,7 +25,6 @@ def get_maps(lines: List[str]) -> dict:
         else:
             is_start_num = True
 
-    print(maps["to_convert"])
     current_map = empty_map()
     new_map = True
     map_name = ""
@@ -31,7 +32,6 @@ def get_maps(lines: List[str]) -> dict:
         if new_map:
             # Get header
             map_name = line.split(" ")[0]
-            print(map_name)
             new_map = False
             continue
 
@@ -76,10 +76,15 @@ if __name__ == "__main__":
     
     maps = get_maps(lines)
 
-    location = 0
+    loc_min = 0
+    loc_max = 50_000_000
+    # location = 31161857
+    location = (loc_max+loc_min)/2
     found = False
     humidity = temperature = light = water = fertilizer = soil = seed = 0
     while not found:
+        location = int((loc_max+loc_min)/2)
+        present = False
         humidity = get_reverse_index_from_map(maps["humidity-to-location"], location)
         temperature = get_reverse_index_from_map(maps["temperature-to-humidity"], humidity)
         light = get_reverse_index_from_map(maps["light-to-temperature"], temperature)
@@ -92,16 +97,18 @@ if __name__ == "__main__":
 
         for range_start, range_end in maps["to_convert"]:
             if seed in range(range_start, range_end):
-                found = True
+                present = True
+                loc_max = location-1
         
-        if not found:
-            location += 1
+        if not present:
+            loc_min = location+1
         
-        if location % 10_000 == 0:
-            print(location)
+        if loc_min >= loc_max:
+            location = loc_min
+            break
     
-    print(location)
 
     output = location
 
     print(f"Output: {output}")
+    print(f"Took {time.time()-start_time}s")
