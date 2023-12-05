@@ -11,7 +11,18 @@ def get_maps(lines: List[str]) -> dict:
     maps = {
         "to_convert": []
     }
-    maps["to_convert"] = [int(x) for x in lines[0].split(": ")[1].split(" ")]
+    nums = [int(x) for x in lines[0].split(": ")[1].split(" ")]
+    maps["to_convert"] = []
+
+    is_start_num = True
+    for index, num in enumerate(nums):
+        if is_start_num:
+            print(num)
+            maps["to_convert"].append((num, num+nums[index+1]))
+            is_start_num = False
+        else:
+            is_start_num = True
+
     print(maps["to_convert"])
     current_map = empty_map()
     new_map = True
@@ -58,20 +69,20 @@ if __name__ == "__main__":
     maps = get_maps(lines)
 
     min_location = 100000000000000
-    for seed in maps["to_convert"]:
-        soil = get_index_from_map(maps["seed-to-soil"], seed)
-        fertilizer = get_index_from_map(maps["soil-to-fertilizer"], soil)
-        # soil = maps["seed-to-soil"][seed]
-        # fertilizer = maps["soil-to-fertilizer"][soil]
-        water = get_index_from_map(maps["fertilizer-to-water"], fertilizer)
-        light = get_index_from_map(maps["water-to-light"], water)
-        temperature = get_index_from_map(maps["light-to-temperature"], light)
-        humidity = get_index_from_map(maps["temperature-to-humidity"], temperature)
-        location = get_index_from_map(maps["humidity-to-location"], humidity)
+    for range_start, range_end in maps["to_convert"]:
+        print(range_start, range_end)
+        for seed in range(range_start, range_end):
+            soil = get_index_from_map(maps["seed-to-soil"], seed)
+            fertilizer = get_index_from_map(maps["soil-to-fertilizer"], soil)
+            water = get_index_from_map(maps["fertilizer-to-water"], fertilizer)
+            light = get_index_from_map(maps["water-to-light"], water)
+            temperature = get_index_from_map(maps["light-to-temperature"], light)
+            humidity = get_index_from_map(maps["temperature-to-humidity"], temperature)
+            location = get_index_from_map(maps["humidity-to-location"], humidity)
 
-        min_location = min(min_location, location)
+            min_location = min(min_location, location)
+        print(min_location)
 
-        print(seed, location)
     
     print(min_location)
 
