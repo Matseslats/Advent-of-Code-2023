@@ -2,7 +2,9 @@ import time
 from typing import List
 from functools import reduce
 
-def get_ints(in_str: str) -> List[int]:
+def get_ints(in_str: str, combine=False) -> List[int]:
+    if combine:
+        in_str = in_str.replace(" ", "")
     strs = in_str.split(" ")
     ints = []
     for str in strs:
@@ -11,10 +13,11 @@ def get_ints(in_str: str) -> List[int]:
     return ints
 
 # Return e.g.[(7, 9), (15, 40), (30, 200)]
-def make_games(lines: List[str]) -> List[tuple]:
-    times = get_ints(lines[0].split(":")[1])
-    dists = get_ints(lines[1].split(":")[1])
+def make_games(lines: List[str], one_game=False) -> List[tuple]:
+    times = get_ints(lines[0].split(":")[1], combine=one_game)
+    dists = get_ints(lines[1].split(":")[1], combine=one_game)
 
+    print(times, dists, one_game)
     games = list(zip(times, dists))
 
     return games
@@ -22,6 +25,8 @@ def make_games(lines: List[str]) -> List[tuple]:
 def ways_to_beat_game(game: tuple) -> int:
     ways_to_beat = 0
     for held_down in range(game[0]):
+        # if held_down % 1_000_000 == 0:
+        #     print(held_down, "/", game[0])
         dist = held_down*(game[0]-held_down)
         if dist > game[1]:
             ways_to_beat += 1
@@ -37,7 +42,7 @@ if __name__ == "__main__":
         lines = file.readlines()
         lines = [line.strip() for line in lines] # Remove newline char
     
-    games = make_games(lines)
+    games = make_games(lines, one_game=True)
 
     ways_to_beat = [ways_to_beat_game(g) for g in games]
 
