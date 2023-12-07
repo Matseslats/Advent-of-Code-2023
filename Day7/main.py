@@ -33,7 +33,7 @@ def get_type(cards):
     elif set_len == 4: # One pair
         return 1
     elif set_len == 3: # Two pair / Three of a kind
-        if cards.count(card_set[0]) == 3-jokers or cards.count(card_set[1]) == 3-jokers or cards.count(card_set[2]) == 3-jokers or jokers>0 and cards.count(card_set[2]) == 3-jokers:
+        if cards.count(card_set[0]) == 3-jokers or cards.count(card_set[1]) == 3-jokers or cards.count(card_set[2]) == 3-jokers or jokers>0 and cards.count(card_set[3]) == 3-jokers:
             return 3  # Three of a kind
         return 2 # Two pair
     elif set_len == 2: # Four of a kind / Full house
