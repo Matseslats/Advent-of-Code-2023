@@ -1,5 +1,6 @@
 import time
 from typing import List
+import numpy as np
 
 class Node:
     name = None
@@ -35,14 +36,20 @@ def get_nodes(lines: List[str]):
 
     return nodes
 
-def traverse_nodes(choices: str, nodes: List[Node]) -> int:
+def get_nodes_ends_with(nodes: List[Node], start_char: str) -> List[Node]:
+    out = []
+    for n in nodes:
+        if nodes[n].name[-1] == start_char:
+            out.append(nodes[n])
+    
+    return out
+
+def get_path_len(current_node):
     steps = 0
-    current_node = nodes['AAA']
-    print(choices)
     while True:
         for c in choices:
             # print("Am at:", current_node.name)
-            if current_node.name == 'ZZZ':
+            if current_node.name[-1] == 'Z':
                 return steps
             # print(f"Can go to {current_node.left_child_name} or {current_node.right_child_name}")
             steps += 1
@@ -52,6 +59,15 @@ def traverse_nodes(choices: str, nodes: List[Node]) -> int:
             else:
                 current_node = nodes[current_node.right_child_name]
 
+
+def traverse_nodes(choices: str, nodes: List[Node]) -> int:
+    current_nodes = get_nodes_ends_with(nodes, 'A')
+    # print(len(current_nodes), choices)
+    lengths = [get_path_len(node) for node in current_nodes]
+    # print(lengths)
+    return np.lcm.reduce(lengths, dtype=np.int64) # Get lowest common multiple
+
+            
         
 
 
