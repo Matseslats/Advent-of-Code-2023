@@ -41,7 +41,10 @@ if __name__ == "__main__":
     
     next_vals = [get_next(line) for line in lines]
 
+    prev_vals = [get_next(list(reversed(line))) for line in lines]
+
 
     end_time = time.time()
-    print(f"Sum of next vals: {sum(next_vals)}. Next vals: {next_vals}")
+    print(f"Sum of next vals: {sum(next_vals)}") #. Next vals: {next_vals}")
+    print(f"Sum of prev vals: {sum(prev_vals)}") #. Prev vals: {prev_vals}")
     print(f"Took {((end_time-start_time)*1000):.4}ms")
