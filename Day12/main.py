@@ -55,9 +55,9 @@ def get_solution(line, to_match, depth=0):
 def get_input(line):
     string, ints = line.split(" ")
     ints = [int(i) for i in ints.split(",")]
-    string = string*1
-    ints = ints*1
-    print("INPUT:",string, ints)
+    string = "?".join([string]*5)
+    ints = ints*5
+    # print("INPUT:",string, ints)
     return string, ints
 
 
@@ -78,7 +78,7 @@ if __name__ == "__main__":
         lines = [line.strip() for line in file.readlines()]
     
     solutions = check(lines)
-    print(solutions)
+    # print(solutions)
 
 
     end_time = time.time()
