@@ -24,7 +24,7 @@ if __name__ == "__main__":
     start_time = time.time()
     lines = []
     with open("input.txt") as file:
-        lines = [line.strip() for line in file.readlines()]
+        lines = [[char=='#' for char in line.strip()] for line in file.readlines()]
     
     to_test = []
     value = 0
