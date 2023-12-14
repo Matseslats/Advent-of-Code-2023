@@ -47,7 +47,7 @@ def find_loop(start_matrix):
     seen = {}
     iter = 0
     weight = 0
-    target_iter = 1000000000
+    target_iter = 1000000006
     for _ in tqdm(range(target_iter)):
         for i in range(4):
             global rolled_north
