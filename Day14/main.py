@@ -46,20 +46,20 @@ def find_loop(start_matrix):
     rot_matrix = start_matrix
     seen = {}
     iter = 0
-    weight = 0
     target_iter = 1000000000
     for _ in tqdm(range(target_iter)):
+        tuples = tuple(map(tuple, rot_matrix))
+        if tuples in seen:
+            loop_len = iter-seen[tuples]
+            needed_loops = ((target_iter-seen[tuples]) % loop_len)  # How many more cycles are needed
+            print(loop_len, iter, needed_loops)
+            return rot_matrix, needed_loops, get_weight(rot_matrix)[0]
+
         for i in range(4):
             global rolled_north
             rot_matrix = rotate_matrix(rolled_north)
             weight, rolled_north = get_weight(rot_matrix)
 
-        tuples = tuple(map(tuple, rot_matrix))
-        if tuples in seen:
-            loop_len = iter-seen[tuples]
-            needed_loops = ((target_iter-seen[tuples]) % loop_len) - 1  # How many more cycles are needed
-            print(loop_len, iter, needed_loops)
-            return rot_matrix, needed_loops, get_weight(rot_matrix)[0]
         seen[tuples] = iter
         iter += 1
     return rot_matrix, 0, get_weight(rot_matrix)[0]
