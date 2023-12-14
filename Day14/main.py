@@ -53,11 +53,7 @@ def find_loop(start_matrix):
             global rolled_north
             rot_matrix = rotate_matrix(rolled_north)
             weight, rolled_north = get_weight(rot_matrix)
-        # print_arr(rot_matrix)
-        # print()
-        # print_arr(start_matrix)
-        # print()
-        # print()
+
         tuples = tuple(map(tuple, rot_matrix))
         if tuples in seen:
             loop_len = iter-seen[tuples]
