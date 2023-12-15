@@ -29,7 +29,6 @@ main = do
     let inputString = contents
     let inputValues = splitByComma inputString
 
-    let hashes = map getHash $ map reverse inputValues
+    let sumPt1 = sum $ map getHash $ map reverse inputValues
 
-    let sumPt1 = sum hashes
     print sumPt1
