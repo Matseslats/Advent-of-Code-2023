@@ -16,20 +16,19 @@ def get_focal_power(boxes):
 
 # Update the boxes dict with the new box
 def update_box(in_arr, boxes):
-    # Split at either = or -
-    parts = re.split(r'[-=]', in_arr)
-    value = None
-    hashval = get_hash(parts[0])
     # If there is a value, add it to the dict
-    if parts[1] != '':
+    if '=' in in_arr:
+        parts = in_arr.split('=')
+        hashval = get_hash(parts[0])
         value = int(parts[1])
         if hashval not in boxes: # If the key doesnt exst, create it
             boxes[hashval] = OrderedDict()
         boxes[hashval][parts[0]] = value
     # If there is no value, remove it from the dict
     else:
-        if hashval in boxes and parts[0] in boxes[hashval]: # Check if the key exists
-            del boxes[hashval][parts[0]]
+        hashval = get_hash(in_arr[:-1])
+        if hashval in boxes and in_arr[:-1] in boxes[hashval]: # Check if the key exists
+            del boxes[hashval][in_arr[:-1]]
     
     return boxes
 
@@ -46,11 +45,11 @@ def get_hash(in_arr):
     return hash
 
 if __name__ == "__main__":
-    start_time = time.time()
     in_array = []
     with open("input.txt") as file:
         in_array = file.readline().strip().split(",")
 
+    start_time = time.time()
     hashes = [get_hash(line) for line in in_array]
 
     boxes = {}
