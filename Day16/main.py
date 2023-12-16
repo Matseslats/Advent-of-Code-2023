@@ -45,11 +45,11 @@ def get_new_dir(char, dir):
         print("Unknown char", char)
 
 
-def simulate(grid):
+def simulate(grid, start_x, start_y, start_dir):
     beams = [{
-        "x": 0,
-        "y": 0,
-        "dir": 'E'
+        "x": start_x,
+        "y": start_y,
+        "dir": start_dir
     }]
     energies = [[0 for y in range(len(grid[0]))] for x in range(len(grid))]
 
@@ -105,11 +105,34 @@ if __name__ == "__main__":
 
     start_time = time.time()
 
-    energies = simulate(grid)
+    energies = simulate(grid, 0, 0, 'E')
+    energized_pt1 = count_energies(energies)
 
-    energized = count_energies(energies)
+    max_energized = 0
+    # Start from all edges and move inward
+    for x in range(len(grid[0])):
+        energies = simulate(grid, x, 0, 'S')
+        energized = count_energies(energies)
+        if energized > max_energized:
+            max_energized = energized
+
+        energies = simulate(grid, x, len(grid), 'N')
+        energized = count_energies(energies)
+        if energized > max_energized:
+            max_energized = energized
+    
+    for y in range(len(grid)):
+        energies = simulate(grid, 0, y, 'E')
+        energized = count_energies(energies)
+        if energized > max_energized:
+            max_energized = energized
+
+        energies = simulate(grid, len(grid[0]), y, 'W')
+        energized = count_energies(energies)
+        if energized > max_energized:
+            max_energized = energized
 
     end_time = time.time()
-    print(f"Solution Pt1: {energized}")
-    print(f"Solution Pt2: {0}")
+    print(f"Solution Pt1: {energized_pt1}")
+    print(f"Solution Pt2: {max_energized}")
     print(f"Took {((end_time - start_time) * 1000):.4}ms")
