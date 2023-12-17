@@ -1,7 +1,7 @@
 from heapq import heappop, heappush
 import time
 
-# Pt 1 help from https://www.youtube.com/watch?v=2pDSooPLLkI
+# Pt 1 and 2 help from https://www.youtube.com/watch?v=2pDSooPLLkI
 
 def solve(grid):
     seen = set()
@@ -11,7 +11,7 @@ def solve(grid):
     while pq:
         hl, r, c, dr, dc, n = heappop(pq) # Heat loss, row, col, dir row, dir col, steps taken this dir
 
-        if r == len(grid) -1 and c == len(grid[0]) -1:
+        if r == len(grid) -1 and c == len(grid[0]) -1 and n >= 4:
             return hl
 
         if (r, c, dr, dc, n) in seen:
@@ -19,18 +19,19 @@ def solve(grid):
 
         seen.add((r, c, dr, dc, n))
 
-        if n < 3 and (dr, dc) != (0,0):
+        if n < 10 and (dr, dc) != (0,0):
             nr = r + dr
             nc = c + dc
             if 0 <= nr < len(grid) and 0 <= nc < len(grid[0]):
                 heappush(pq, (hl + grid[nr][nc], nr, nc, dr, dc, n+1))
         
-        for ndr, ndc in [(0, 1), (1, 0), (0,-1), (-1, 0)]:
-            if (ndr, ndc) != (dr, dc) and (ndr, ndc) != (-dr, -dc):
-                nr = r + ndr
-                nc = c + ndc
-                if 0 <= nr < len(grid) and 0 <= nc < len(grid[0]):
-                    heappush(pq, (hl + grid[nr][nc], nr, nc, ndr, ndc, 1))
+        if n >= 4 or (dr, dc) == (0,0):
+            for ndr, ndc in [(0, 1), (1, 0), (0,-1), (-1, 0)]:
+                if (ndr, ndc) != (dr, dc) and (ndr, ndc) != (-dr, -dc):
+                    nr = r + ndr
+                    nc = c + ndc
+                    if 0 <= nr < len(grid) and 0 <= nc < len(grid[0]):
+                        heappush(pq, (hl + grid[nr][nc], nr, nc, ndr, ndc, 1))
 
 
 if __name__ == "__main__":
