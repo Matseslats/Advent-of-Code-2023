@@ -21,9 +21,6 @@ def count_squares_in_path(path):
 
 def solve(lines: List[str], useColor=False):
     x, y = 0, 0
-    max_x, max_y = 0, 0
-    nodes = {(x, y): 0}
-    coords = []
     perimeter = 0
     area = 0
     dist_vecs = {"U": (-1, 0), "D": (1, 0), "L": (0, -1), "R": (0, 1)}
