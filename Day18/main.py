@@ -1,22 +1,5 @@
 import time
-from typing import List, Tuple
-from shapely.geometry import Polygon
-
-
-def count_squares_in_path(path):
-    total_squares = 0
-
-    for i in range(len(path) - 1):
-        x1, y1 = path[i]
-        x2, y2 = path[i + 1]
-
-        # Calculate Manhattan distance
-        distance = abs(x2 - x1) + abs(y2 - y1)
-
-        # Sum up the Manhattan distances
-        total_squares += distance
-
-    return total_squares
+from typing import List
 
 
 def solve(lines: List[str], useColor=False):
