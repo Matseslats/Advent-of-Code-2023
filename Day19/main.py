@@ -1,5 +1,7 @@
 import time
-import json
+from copy import deepcopy
+
+# Part 2 reference https://www.reddit.com/r/adventofcode/comments/18lyvuv/2023_day_19_part_2_sankey_diagrams_are_cool/
 
 def get_rule(rule):
     condition, dest = rule.split(":")
@@ -19,6 +21,7 @@ def get_rule(rule):
         "value_check": int(value_check),
         "dest": dest
     }
+
 
 def get_rules(line):
     key, values = line.split("{")
@@ -80,8 +83,52 @@ def accept_or_reject(conditions, rules):
             # print("Default key")
             # Part not found, use default
             key = rule["dest"]
-    print("Exiting...")
-    exit()
+
+
+def get_options(max_range):
+    tot_options = 1
+    for key in max_range.keys():
+        tot_options *= (max_range[key][1]+1) - (max_range[key][0])
+    return tot_options
+
+
+def invert_ranges(max_range):
+    new_ranges = {}
+    for key in max_range.keys():
+        new_ranges[key] = max_range[key][::-1]
+    return new_ranges
+
+
+print_ranges = []
+# print_ranges = ["in", "px", "qqz"]
+# print_ranges = ["qs", "hdj", "bbb", "qqz"]
+def get_passes(rules, start_rule, max_range):
+    max_ranges = deepcopy(max_range)
+    if start_rule == "A":
+        return get_options(max_ranges)
+    elif start_rule == "R":
+        return 0
+
+    tot_passes = 0
+    
+    if start_rule in print_ranges:
+        print("Checking:", start_rule, "; Range here:", get_options(max_ranges), max_ranges)
+        print(max_ranges)
+    
+    remaining_ranges = deepcopy(max_ranges)
+    for check in rules[start_rule]["int_rules"]:
+        max_ranges = deepcopy(remaining_ranges)
+        if check["operand"] == "<":
+            max_ranges[check["part_type"]][1] = min(check["value_check"]-1, max_ranges[check["part_type"]][1])
+            remaining_ranges[check["part_type"]][0] = max(max_ranges[check["part_type"]][1]+1, remaining_ranges[check["part_type"]][0])
+        else:
+            max_ranges[check["part_type"]][0] = max((check["value_check"]+1), max_ranges[check["part_type"]][0])
+            remaining_ranges[check["part_type"]][1] = min(max_ranges[check["part_type"]][0]-1, remaining_ranges[check["part_type"]][1])
+
+        tot_passes += get_passes(rules, check["dest"], max_ranges)
+
+    tot_passes += get_passes(rules, rules[start_rule]["dest"], remaining_ranges)
+    return tot_passes
 
 
 if __name__ == "__main__":
@@ -102,10 +149,15 @@ if __name__ == "__main__":
             rules[rule["key"]] = rule 
         else:
             tot_sum += accept_or_reject(get_vars(line), rules)
-            # print(tot_sum)
+    
+    pt2 = get_passes(rules, "in", {
+        "x": [1, 4000],
+        "m": [1, 4000],
+        "a": [1, 4000],
+        "s": [1, 4000]
+    })
 
     end_time = time.time()
     print(f"Solution Pt1: {tot_sum}")
-    # print(f"Solution Pt2: {loss_pt2}")
-    # print(f"Solution Pt2: {max_energized}")
+    print(f"Solution Pt2: {pt2}")
     print(f"Took {((end_time - start_time) * 1000):.4}ms")
