@@ -28,13 +28,13 @@ if __name__ == "__main__":
     start_time = time.time()
 
     graph = init_graph(lines)
-    current_spaces = {graph["S"]}
+    current_spaces = set()
+    current_spaces.add(graph["S"])
     for i in tqdm.tqdm(range(64)):
-        new_spaces = {}
+        new_spaces = set()
         for space in current_spaces:
             for neighbor in graph[space]:
-                if neighbor not in new_spaces:
-                    new_spaces[neighbor] = 0
+                new_spaces.add(neighbor)
         
         current_spaces = new_spaces
     # print(current_spaces)
